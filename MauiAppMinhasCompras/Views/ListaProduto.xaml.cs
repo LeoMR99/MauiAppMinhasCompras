@@ -138,4 +138,25 @@ public partial class ListaProduto : ContentPage
             lst_produtos.IsRefreshing = false;
         }
     }
+
+    private async void ToolbarItem_Clicked_2(object sender, EventArgs e)
+      {
+        var relatorio = lista
+        .GroupBy(v => v.Categoria)
+        .Select(grupo => new Produto
+        {
+            Categoria = grupo.Key,
+            TotalGasto = grupo.Sum(v => v.Total)
+        })
+        .ToList();
+
+        string mensagem = "Relatório de Gastos por Categoria:\n\n";
+
+        foreach (var item in relatorio)
+        {
+            mensagem += $"{item.Categoria}: {item.TotalGasto:C}\n";
+        }
+
+        await DisplayAlert("Relatório", mensagem, "OK");
+    }
 }
